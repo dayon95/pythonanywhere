@@ -1,0 +1,29 @@
+{% extends 'data01/base.html' %}
+
+{% block content %}
+
+  <div class="col-lg-9">
+    <div class="row">
+      <h2 class="my-4">{{q}}에 대한 검색결과</h2>
+    </div>
+    <div class="row">
+      <h4 class="mb-2">금주의 행사</h4>
+    </div>
+    <div class="row">
+      {% for pd2 in this_week_list %}
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card">
+            <a class="poster_item" href="" id={{pd2.imgurl}}><img class="card-img-top" src= "{{pd2.imgurl}}" alt=""></a>
+            <div class="card-body">
+              <p class="card-text">{{pd2.title}}</p>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        금주 해당 카테고리의 행사가 없습니다.
+      {% endfor %}
+    </div>
+    <!-- /.금주의 행사-->
+  </div>
+  <!-- /.col-lg-9 -->
+{% endblock %}

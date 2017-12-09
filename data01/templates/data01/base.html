@@ -1,0 +1,225 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>POSLUNCH-MAIN</title>
+
+  <style>
+    @import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+    @import url(http://fonts.googleapis.com/earlyaccess/jejumyeongjo.css);
+  </style>
+
+  <!-- Bootstrap core CSS -->
+  <link href='{% static "vendor/bootstrap/css/bootstrap.min.css" %}' rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href='{% static "css/shop-homepage.css" %}' rel="stylesheet">
+
+</head>
+
+<body>
+  <!-- test modal-->
+  <div id="myModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">상세 정보</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  <!-- modal test completed -->
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      {% url 'index' as index %}
+      <a class="navbar-brand" href="{{index}}">
+        <img src='{% static "PosLunLogo.png" %}' width="30" height="30" class="d-inline-block align-top mr-1" alt="">
+        <lead class="align-bottom" >
+        POSLUNCH
+      </lead>
+        </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{index}}">Home
+                <span class="sr-only">(current)</span>
+              </a>
+          </li>
+          <li class="nav-item">
+            {% url 'about' as about %}
+            <a class="nav-link" href="{{about}}">About</a>
+          </li>
+          <li class="nav-item">
+            {% url 'calendar' as calendar %}
+            <a class="nav-link" href="{{calendar}}">Calendar</a>
+          </li>
+          <li class="nav-item">
+            {% url 'new' 1 as new_feedback %}
+            <a class="nav-link" href="{{new_feedback}}">Feedback</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+
+        <h2 class="my-4">categories</h2>
+        <div class="list-group">
+          {% for n in categories %} {% if n == category %}
+          <a href="/{{n}}/" class="list-group-item active">{{n}}</a> {% else %}
+          <a href="/{{n}}/" class="list-group-item">{{n}}</a> {% endif %} {% endfor %}
+        </div>
+        <h2 class="my-4"></h2>
+        <form methode='GET'>
+        <div class ="input-group">
+
+            <input type="text" class="form-control" name='q' placeholder='Search posts' id="search_text" value='{{ request.GET.q }}' aria-label="Search_for...">
+            <span class="input-group-btn">
+              <button class ="btn btn-secondary" type="submit" value='search'>검색</button>
+            </span>
+        </div>
+        <h5 class="my-4">상품 있는 행사만 보기
+          <input type="checkbox" name="opt" id="gift_checkbox">
+        </h5>
+        <!--
+          <div class="checkbox">
+            <form method="GET" action=''>
+              <fieldset>
+                </br>
+                <h5> 부가 검색 옵션 </h5>
+                <input type="checkbox" name="opt" id="gift_checkbox"  >상품있음
+                </br>
+                </br>
+
+                <td>
+                  <h5> 행사명 검색 </h5>
+                  <form method='GET' action=''>
+                    <input type='text' name='q' placeholder='Search posts' id="search_text" value='{{ request.GET.q }}' size=25 maxlength=30>
+                    <input type='submit' value='Search' />
+              </fieldset>
+              </td>
+          </div>
+        -->
+
+      </div>
+      <!-- /.col-lg-3 -->
+      {% block content %}
+
+      {% endblock %}
+    </div>
+      <!-- /.row -->
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="myfooter py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; POSLUNCH 2017</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src='{% static  "vendor/jquery/jquery.min.js " %}'></script>
+  <script src='{% static  "vendor/bootstrap/js/bootstrap.bundle.min.js " %}'></script>
+
+
+
+</body>
+
+<script>
+
+
+  $('#test_a_tag').click(function(event) {
+    event.preventDefault();
+    $('#myModal').modal('toggle');
+  });
+
+  $("body").on("click", ".poster_item", function(event) {
+    //function(event)에서 event는 이벤트 타입이 저장되는 변수임
+    //alert("!!");
+    event.preventDefault();
+    //carousel-inner 안에있는 carousel-item 각각에 대해 a태그를 입력해서 클릭 가능하게 해둠.
+    //근데, 클릭만 되고 링크이동은 안시키려고 위의 문장을 추가해둠.
+    var poster_id = $(this).attr('id'); //this는 class가 carousel인 DOM이 저장됨
+    console.log(poster_id);
+    //(DOM은 일종의 객체, 아마 this에는 class가 a_carousel_item인 문서가 들어있을것)
+    //attr()는 속성을 반환함. 'id'속성 값을 반환함.
+    //alert(carousel_id);  //연습용
+
+    //http://hsj0511.tistory.com/205 참고
+    //https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html 참고
+
+    $.ajax({
+      url: '/ajax/poster_detail/',
+      data: {
+        'clicked_poster': poster_id
+      },
+      success: function(data) {
+        //alert("!!");
+        //여기서 data는 서버로부터 받아온 data
+        console.log(data);
+        $(".modal-body").html(data.post_html);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {}
+    });
+    $('#myModal').modal('toggle');
+  });
+
+  $("#gift_checkbox").change(function(){
+    var opt;
+    var is_checked='true';
+    var search_text = $("#search_text").val();
+    if($("#gift_checkbox").is(":checked")){
+      //alert("체크");
+      opt='on';
+    }
+    else{
+      //alert("체크해제");
+      opt='off';
+    }
+    $.ajax({
+      data: {
+        'opt': opt,
+        'q': search_text,
+        'checked':is_checked
+      },
+      success: function(data) {
+        //alert("!!");
+        //여기서 data는 서버로부터 받아온 data
+        console.log(data);
+        $(".col-lg-9").replaceWith(data.post_html);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {}
+    });
+  });
+
+</script>
+
+</html>

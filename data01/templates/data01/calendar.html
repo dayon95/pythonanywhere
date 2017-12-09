@@ -1,0 +1,155 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+
+  <title>POSLUNCH-CALENDAR</title>
+  <p align="middle">
+  <iframe src="https://calendar.google.com/calendar/embed?src=p9nsbhtjhqv03lkua3gm1r6r6k%40group.calendar.google.com&ctz=Asia%2FSeoul" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+  </p>
+
+  <style>
+    @import url(http://fonts.googleapis.com/earlyaccess/jejugothic.css);
+    @import url(http://fonts.googleapis.com/earlyaccess/jejumyeongjo.css);
+
+    body{
+      background-image:
+      url('http://auroraforecast.com/img/aurora-borealis-over-forest-19521145-fb-share1.jpg');
+      background-size: cover;
+      background-repeat:no-repeat;
+      background-position:center center;
+
+
+    }
+
+  </style>
+
+  <!-- Bootstrap core CSS -->
+  <link href='{% static "vendor/bootstrap/css/bootstrap.min.css" %}' rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href='{% static "css/shop-homepage.css" %}' rel="stylesheet">
+</head>
+
+<body>
+
+
+  <!-- test modal-->
+  <div id="myModal" class="modal fade">
+  <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">상세 정보</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <!-- modal test completed -->
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      {% url 'index' as index %}
+      <a class="navbar-brand" href="{{index}}">
+        <img src='{% static "PosLunLogo.png" %}' width="30" height="30" class="d-inline-block align-top mr-1" alt="">
+        <lead class="align-bottom" >
+        POSLUNCH
+      </lead>
+        </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{index}}">Home
+                <span class="sr-only">(current)</span>
+              </a>
+          </li>
+          <li class="nav-item">
+            {% url 'about' as about %}
+            <a class="nav-link" href="{{about}}">About</a>
+          </li>
+          <li class="nav-item active">
+            {% url 'calendar' as calendar %}
+            <a class="nav-link" href="{{calendar}}">Calendar</a>
+          </li>
+          <li class="nav-item">
+            {% url 'new' 1 as new_feedback %}
+            <a class="nav-link" href="{{new_feedback}}">Feedback</a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="myfooter py-5">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; POSLUNCH 2017</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src='{% static  "vendor/jquery/jquery.min.js " %}'></script>
+  <script src='{% static  "vendor/bootstrap/js/bootstrap.bundle.min.js " %}'></script>
+  <script>
+    $('#test_a_tag').click(function(event){
+      event.preventDefault();
+      $('#myModal').modal('toggle');
+    });
+    $(".a_carousel_item").click(function(event){
+      //function(event)에서 event는 이벤트 타입이 저장되는 변수임
+      event.preventDefault();
+      //carousel-inner 안에있는 carousel-item 각각에 대해 a태그를 입력해서 클릭 가능하게 해둠.
+      //근데, 클릭만 되고 링크이동은 안시키려고 위의 문장을 추가해둠.
+      var carousel_id = $(this).attr('id');  //this는 class가 carousel인 DOM이 저장됨
+      //(DOM은 일종의 객체, 아마 this에는 class가 a_carousel_item인 문서가 들어있을것)
+      //attr()는 속성을 반환함. 'id'속성 값을 반환함.
+      //alert(carousel_id);  //연습용
+
+      //http://hsj0511.tistory.com/205 참고
+      //https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html 참고
+
+      $.ajax({
+        url:'/ajax/poster_detail/',
+        data:{
+          'clicked_poster':carousel_id
+        },
+        success: function(data){
+          //alert("!!");
+          //여기서 data는 서버로부터 받아온 data
+          console.log(data);
+          $(".modal-body").html(data.post_html);
+        },
+        error:function (xhr, ajaxOptions, thrownError) {
+        }
+      });
+      $('#myModal').modal('toggle');
+    });
+  </script>
+
+</body>
+
+</html>
